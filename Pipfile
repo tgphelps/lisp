@@ -9,6 +9,7 @@ docopt = "*"
 [dev-packages]
 flake8 = "*"
 mypy = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.10"

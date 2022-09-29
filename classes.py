@@ -1,11 +1,15 @@
 
-from typing import Any, Optional
+from typing import Any, Optional, Callable
 
 
 class Obj:
     subtype: int
     vars: Any
     up: Optional[Any]
+    car: Any
+    cdr: Any
+    fn: Callable[[Any, Any], Any]
+    name: str
 
     def __init__(self, typ: int):
         self.typ: int = typ

@@ -4,17 +4,18 @@
 from typing import Optional
 from globals import g
 from classes import Obj, C
+import prims
 import util
 
 
 def main() -> int:
-    g.nil = make_special(C.TNIL)
-    g.dot = make_special(C.TDOT)
-    g.cparen = make_special(C.TCPAREN)
-    g.true = make_special(C.TTRUE)
+    g.nil = prims.make_special(C.TNIL)
+    g.dot = prims.make_special(C.TDOT)
+    g.cparen = prims.make_special(C.TCPAREN)
+    g.true = prims.make_special(C.TTRUE)
     g.symbols = g.nil
 
-    env: Obj = make_env(g.nil, None)
+    env: Obj = prims.make_env(g.nil, None)
     define_constants(env)
     define_primitivess(env)
 
@@ -28,20 +29,7 @@ def main() -> int:
             util.error("Stray dot")
         print(eval(env, expr))
         print()
-        break  # XXX temp
-
-
-def make_special(n: int) -> Obj:
-    obj = Obj(C.TSPECIAL)
-    obj.subtype = n
-    return obj
-
-
-def make_env(vars: Obj, up: Optional[Obj]) -> Obj:
-    obj = Obj(C.TENV)
-    obj.vars = vars
-    obj.up = up
-    return obj
+        return 0  # XXX temp
 
 
 def define_constants(env: Obj) -> None:
