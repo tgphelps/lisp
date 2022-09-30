@@ -1,14 +1,26 @@
 
 from classes import C
-import lisp
+from globals import g
+import prims
+
+
+# XXX This doesn't really test anything in lisp.py
 
 def test_intern():
-    lisp.intern('mysym1')
-    lisp.intern('mysym2')
-    lisp.intern('mysym3')
+    g.nil = prims.make_special(C.TNIL)
+    g.symbols = g.nil
 
-    sym = lisp.Symbols
-    while sym is not None:
+    prims.intern('mysym1')
+    prims.intern('mysym2')
+    prims.intern('mysym3')
+
+    dump_symbols()
+
+
+def dump_symbols():
+    print('SYMBOLS:')
+    sym = g.symbols
+    while sym != g.nil:
         assert sym.typ == C.TCELL
         print(f'symbol: {sym.car}')
         sym = sym.cdr
