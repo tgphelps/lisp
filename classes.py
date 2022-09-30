@@ -15,7 +15,14 @@ class Obj:
         self.typ: int = typ
 
     def __repr__(self):
-        return f'Obj({self.typ})'
+        if self.typ == C.TCELL:
+            return f'TCELL car: ({self.car}) cdr: ({self.cdr})'
+        elif self.typ == C.TSYMBOL:
+            return f'TSYMBOL name: {self.name}'
+        elif self.typ == C.TENV:
+            return f'TENV vars: ({self.vars}) up: ({self.up})'
+        else:
+            return f'Obj({self.typ})'
 
     #
     # An Obj is like a C tagged union. 'typ' is the tag. There will be

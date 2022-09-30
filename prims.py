@@ -30,7 +30,7 @@ def make_symbol(name: str) -> Obj:
     return obj
 
 
-def cons(car: Obj, cdr: Obj) -> Obj:
+def cons(car: Obj, cdr: Optional[Obj]) -> Obj:
     obj = Obj(C.TCELL)
     obj.car = car
     obj.cdr = cdr
@@ -39,3 +39,7 @@ def cons(car: Obj, cdr: Obj) -> Obj:
 
 def acons(x: Obj, y: Obj, a: Obj) -> Obj:
     return cons(cons(x, y), a)
+
+
+def add_variable(env: Obj, sym: Obj, val: Obj) -> None:
+    env.vars = acons(sym, val, env.vars)

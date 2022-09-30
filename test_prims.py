@@ -48,3 +48,19 @@ def test_make_primitive():
 def test_make_symbol():
     obj = prims.make_symbol('mysym')
     assert obj.name == 'mysym'
+
+
+def test_add_variable():
+    nil = prims.make_special(C.TNIL)
+    env = prims.make_env(nil, None)
+
+    sym = prims.make_symbol('mysym')
+    val = prims.make_symbol('myval')
+    prims.add_variable(env, sym, val)
+    print(f'env: {env}')
+    print(f'sym: {sym}')
+    print(f'val: {val}')
+    vars = env.vars
+    print(f'vars(env): {vars}')
+    print(f'car(vars): {vars.car}')
+    print(f'cdr(vars: {vars.cdr}')

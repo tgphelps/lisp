@@ -8,6 +8,9 @@ import prims
 import util
 
 
+Symbols: Optional[Obj] = None
+
+
 def main() -> int:
     g.nil = prims.make_special(C.TNIL)
     g.dot = prims.make_special(C.TDOT)
@@ -15,7 +18,7 @@ def main() -> int:
     g.true = prims.make_special(C.TTRUE)
     g.symbols = g.nil
 
-    env: Obj = prims.make_env(g.nil, None)
+    env = prims.make_env(g.nil, None)
     define_constants(env)
     define_primitivess(env)
 
@@ -30,6 +33,18 @@ def main() -> int:
         print(eval(env, expr))
         print()
         return 0  # XXX temp
+
+
+def intern(name: str) -> Obj:
+    global Symbols
+    obj = Symbols
+    while obj is not None:
+        if obj.car.name == name:
+            return obj.car
+        obj = obj.cdr
+    sym = prims.make_symbol(name)
+    Symbols = prims.cons(sym, Symbols)
+    return sym
 
 
 def define_constants(env: Obj) -> None:
