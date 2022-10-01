@@ -33,7 +33,6 @@ def main() -> int:
             util.error("Stray dot")
         print(eval(env, expr))
         print()
-        return 0  # XXX temp
 
 
 def define_constants(env: Obj) -> None:

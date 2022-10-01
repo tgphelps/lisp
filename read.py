@@ -31,24 +31,9 @@ def peek() -> str:
     return c
 
 
-def read_quote() -> Obj:
-    sym = prims.intern('quote')
-    return prims.cons(sym, prims.cons(read(), g.nil))
-
-
-def read_number(val: int) -> int:
-    while peek().isdigit():
-        val = val * 10 + (ord(getchar()) - ord('0'))
-    return val
-
-
 def read():
     while True:
         c = getchar()
-        # Must handle:
-        # '(' list
-        # '-' negative int
-        # alpha or other symbol char
         if not c:
             return None
         if c in ' \n\r\t':
@@ -66,6 +51,11 @@ def read():
             return prims.make_int(read_number(ord(c) - ord('0')))
         if c == '-':
             return prims.make_int(-read_number(0))
+        if c.isalpha() or c in '+=!@#$%^&*':
+            return read_symbol(c)
+        if c == '(':
+            # return read_list()
+            util.error('Cannt read a list yet')
         util.error("Don't know how to handle %c", c)
 
 
@@ -74,3 +64,28 @@ def skip_line() -> None:
         c = getchar()
         if (c is None) or (c == '\n'):
             return
+
+
+def read_quote() -> Obj:
+    sym = prims.intern('quote')
+    return prims.cons(sym, prims.cons(read(), g.nil))
+
+
+def read_number(val: int) -> int:
+    while peek().isdigit():
+        val = val * 10 + (ord(getchar()) - ord('0'))
+    return val
+
+
+MAX_SYMLEN = 100
+
+
+def read_symbol(c: str) -> Obj:
+    buf = c
+    symlen = 1
+    while peek().isalnum() or peek() == '-':
+        if symlen >= MAX_SYMLEN:
+            util.error('symbol too long')
+        buf += getchar()
+        symlen += 1
+    return prims.intern(buf)
