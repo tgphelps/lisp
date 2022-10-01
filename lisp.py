@@ -4,6 +4,7 @@ from typing import Optional
 from globals import g
 from classes import Obj, C
 import prims
+import read
 import util
 
 
@@ -22,8 +23,9 @@ def main() -> int:
     define_primitivess(env)
 
     while True:
-        expr = read()
+        expr = read.read()
         if not expr:
+            print('EOF')
             return 0
         if expr == g.cparen:
             util.error("Stray close parenthesis")
@@ -54,11 +56,6 @@ def define_primitivess(env: Obj) -> None:
     prims.add_primitive(env, "=", prims.dummy_prim)
     prims.add_primitive(env, "println", prims.dummy_prim)
     prims.add_primitive(env, "exit", prims.dummy_prim)
-
-
-def read() -> Optional[Obj]:
-    print('TODO: read')
-    return g.nil
 
 
 def eval(env: Obj, expr: Obj) -> Obj:
