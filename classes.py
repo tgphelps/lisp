@@ -10,6 +10,7 @@ class Obj:
     cdr: Any
     fn: Callable[[Any, Any], Any]
     name: str
+    value: int
 
     def __init__(self, typ: int):
         self.typ: int = typ
@@ -21,6 +22,8 @@ class Obj:
             return f'TSYMBOL name: {self.name}'
         elif self.typ == C.TENV:
             return f'TENV vars: ({self.vars}) up: ({self.up})'
+        elif self.typ == C.TINT:
+            return f'TINT val: {self.value}'
         else:
             return f'Obj({self.typ})'
 

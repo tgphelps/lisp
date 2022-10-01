@@ -60,7 +60,7 @@ def define_primitivess(env: Obj) -> None:
 
 def eval(env: Obj, expr: Obj) -> Obj:
     print('TODO: eval')
-    return g.nil
+    return expr
 
 
 def pprint(Obj) -> None:

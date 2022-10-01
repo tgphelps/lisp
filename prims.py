@@ -8,6 +8,12 @@ from globals import g
 import util
 
 
+def make_int(n: int) -> Obj:
+    obj = Obj(C.TINT)
+    obj.value = n
+    return obj
+
+
 def make_special(n: int) -> Obj:
     obj = Obj(C.TSPECIAL)
     obj.subtype = n
