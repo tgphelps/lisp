@@ -31,7 +31,7 @@ def main() -> int:
             util.error("Stray close parenthesis")
         if expr == g.dot:
             util.error("Stray dot")
-        print(eval(env, expr))
+        oprint(eval(env, expr))
         print()
 
 
@@ -57,13 +57,42 @@ def define_primitivess(env: Obj) -> None:
     prims.add_primitive(env, "exit", prims.dummy_prim)
 
 
-def eval(env: Obj, expr: Obj) -> Obj:
-    print('TODO: eval')
-    return expr
+def eval(env: Obj, obj: Obj) -> Obj:
+    if obj.typ in (C.TINT, C.TPRIMITIVE, C.TFUNCTION, C.TSPECIAL):
+        return obj
+    elif obj.typ == C.TSYMBOL:
+        bind = prims.find(env, obj)
+        if bind is None:
+            util.error(f'undefined symbol: {obj.name}')
+        return bind.cdr
+    elif obj.typ == C.TCELL:
+        util.error('eval cannot do functions yet')
+    else:
+        util.error('eval caanot get here')
 
 
-def pprint(Obj) -> None:
-    print('TODO: pprint')
+def oprint(obj: Obj) -> None:
+    if obj.typ == C.TINT:
+        print(f'{obj.value}', end='')
+    elif obj.typ == C.TSYMBOL:
+        print(f'{obj.name}', end='')
+    elif obj.typ == C.TPRIMITIVE:
+        print('<primitive>', end='')
+    elif obj.typ == C.TFUNCTION:
+        print('<function>', end='')
+    elif obj.typ == C.TMACRO:
+        print('<macro>', end='')
+    elif obj.typ == C.TCELL:
+        print('ERR: cell', end='')
+    elif obj.typ == C.TSPECIAL:
+        if obj == g.nil:
+            print('()', end='')
+        elif obj == g.true:
+            print('t', end='')
+        else:
+            print('ERR: bad special', end='')
+    else:
+        util.error('oprint cannot get here')
 
 
 if __name__ == '__main__':
