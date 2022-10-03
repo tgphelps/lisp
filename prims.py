@@ -61,18 +61,19 @@ def intern(name: str) -> Obj:
     return sym
 
 
-def find(env: Optional[Obj], sym: Obj) -> Optional[Obj]:
-    assert env.typ == C.TENV
-    while env is not None:
-        cell = env.vars
+def find(env: Obj, sym: Obj) -> Optional[Obj]:
+    this_env: Optional[Obj] = env
+    assert this_env is None or this_env.typ == C.TENV
+    while this_env is not None:
+        cell = this_env.vars
         assert cell.typ == C.TCELL
         while cell != g.nil:
             bind = cell.car
             if sym == bind.car:
                 return bind
             cell = cell.cdr
-        env = env.up
-        assert env is None or env.typ == C.TENV
+        this_env = this_env.up
+        assert this_env is None or this_env.typ == C.TENV
     return None
 
 

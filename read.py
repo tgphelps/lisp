@@ -1,4 +1,4 @@
-
+import pdb
 import sys
 from classes import Obj
 from globals import g
@@ -54,8 +54,9 @@ def read():
         if c.isalpha() or c in '+=!@#$%^&*':
             return read_symbol(c)
         if c == '(':
-            # return read_list()
-            util.error('Cannt read a list yet')
+            obj = read_list()
+            pdb.set_trace()
+            return obj
         util.error("Don't know how to handle %c", c)
 
 
@@ -89,3 +90,35 @@ def read_symbol(c: str) -> Obj:
         buf += getchar()
         symlen += 1
     return prims.intern(buf)
+
+
+def read_list() -> Obj:
+    # pdb.set_trace()
+    obj = read()
+    if not obj:
+        util.error("Unclosed parenthesis")
+    if obj == g.dot:
+        util.error("Stray dot")
+    if obj == g.cparen:
+        return g.nil
+
+    # We have read the head of the list.
+    head = prims.cons(obj, g.nil)  # We will eventually return head
+    tail = head                   # any more objects will be consed onto tail
+
+    # pdb.set_trace()
+    while True:
+        obj = read()
+        if not obj:
+            util.error('unclosed parenthesis')
+        if obj == g.cparen:  # if we have read the whole list
+            print(f'temp1: {head}')
+            return head
+        if obj == g.dot:
+            tail.cdr = read()
+            if read() == g.cparen:
+                util.error('closed parenthesis expected')
+            print(f'temp2 {head}')
+            return head
+        tail.cdr = prims.cons(obj, g.nil)
+        tail = tail.cdr
